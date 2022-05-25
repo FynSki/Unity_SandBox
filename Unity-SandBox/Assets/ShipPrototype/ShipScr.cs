@@ -46,17 +46,10 @@ public class ShipScr : MonoBehaviour
         newPosition.x = newX;
         newPosition.y = newY;
 
-        if(shipX - newX > -2 && shipX - newX < 2)
-            transform.position = newPosition;
+       transform.position = newPosition;
         
     }
 
-    public void GetDept(int deptTogive)
-    {
-        if(dipping > deptTogive)
-        {
-            canSwim = true;
-        }
-    }
+    
 
 }

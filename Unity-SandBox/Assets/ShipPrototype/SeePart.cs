@@ -4,64 +4,80 @@ using UnityEngine;
 
 public class SeePart : MonoBehaviour
 {
+    private Rigidbody2D rgb2d;
+    private Collider2D myCollider;
 
     public int dept;
     public float currX;
     public float currY;
 
-    public GameObject ships;
-    public ShipScr shipScr;
+    public GameMgr1 gameMgr;
     public bool isActive;
-
-    public float disX;
-    public float disY;
-
-    public float shipXdir;
-    public float shipYdir;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        shipScr = FindObjectOfType<ShipScr>();
-        ships = GameObject.FindWithTag("Player");
+        rgb2d = GetComponent<Rigidbody2D>();
+        myCollider = GetComponent<Collider2D>();
+       
+
+        gameMgr = FindObjectOfType<GameMgr1>();
+
         currX = transform.localPosition.x;
         currY = transform.localPosition.y;
-        checkDistance();
+       
     }
 
-    // Update is called once per frame
     void Update()
     {
-        checkDistance();
-        ships = GameObject.FindWithTag("Player");
-        shipXdir = ships.transform.localPosition.x;
-        shipYdir = ships.transform.localPosition.y;
-    }
-
-    public void checkDistance()
-    {
-        disX = currX - ships.transform.localPosition.x;
-        disY = currY - ships.transform.localPosition.y;
-    }
-
-    public void IsActiveCheck()
-    {
-        if(disX <= 1 && disX >= -1 && disY <= 1 && disY >= -1)
-        {
-            isActive = true;
-            shipScr.moveToLocation(currX, currY);
-        }
+        //isActive = Physics2D.IsTouchingLayers(myCollider, whatIsInRange);
+        
     }
 
     void OnMouseDown()
     {
-        ships = GameObject.FindWithTag("Player");
-        shipScr.GetDept(dept);
-        checkDistance();
-        IsActiveCheck();
-
+        gameMgr.SetNewDir(currX, currY, dept);
+        gameMgr.CheckDept();
+        //isActive = gameMgr.isDeep;
+        if (isActive)
+        {
+            if(gameMgr.isDeep == true)
+            {
+                gameMgr.ShipMoving();
+            }
+        }
+        
     }
+
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("range"))
+        {
+            isActive = true;
+
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("range"))
+        {
+            isActive = true;
+
+        }
+    }
+
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("range"))
+        {
+            isActive = false;
+        }
+    }
+
 
 
 
